@@ -1,0 +1,5 @@
+Today I had a design meeting with Frank for the backend authentication system. 
+He had some feedback he wanted to give, including that we should avoid 3rd party packages if possible, and also that the current proposal
+might have some performance issues based on how we integrate with other services. He also added that an ERD would be nice.
+
+We are planning to meet again next week, so I'll try to address some of these concerns for next time.

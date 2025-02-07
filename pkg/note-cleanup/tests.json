@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Test 1",
+    "input": "test1.txt",
+    "output": [
+      "I talked to Alex on the phone today about the Visa application process",
+      "you should not apply by mail",
+      "The applications apparently go missing sometimes if you do",
+      "requested a sample of his underwear",
+      "identification process",
+      "weird if you ask me",
+      "he's going to be flying in next week",
+      "have to get everything wrapped up by then",
+      "follow-ups for next time",
+      "check visa status",
+      "call the immigration bureau",
+      "underwear inspection status",
+      "expedite shipping for his visa to arrive by next thursday"
+    ]
+  },
+  {
+    "name": "Test 2",
+    "input": "test2.txt",
+    "output": [
+      "today I had a design meeting with Frank",
+      "backend authentication system",
+      "he had some feedback he wanted to give",
+      "we should avoid 3rd party packages",
+      "the current proposal might have some performance issues",
+      "how we integrate with other services",
+      "an erd would be nice",
+      "we are planning to meet again next week",
+      "i'll try to address some of these concerns for next time"
+    ]
+  },
+  {
+    "name": "Test 3",
+    "input": "test3.txt",
+    "output": [
+      "had a call with john today and he was quite unhappy",
+      "last shipment of hamster food we sent",
+      "he said the box",
+      "just full of a bunch of",
+      "cracked seed shells",
+      "a hole in the side",
+      "did those damn hamsters get in again?",
+      "we gotta hunt down those guys",
+      "they're ruining our business!",
+      "who would've thought a rogue gang of",
+      "street hamsters",
+      "would be our company's biggest issue",
+      "i told him that we are making every effort to correct the situation",
+      "we will cover the costs",
+      "next week, we need to do the following",
+      "make a call to the chamber of hamster affairs",
+      "to file a complaint",
+      "box a new shipment of squeaky deluxe",
+      "and send it to john",
+      "contact that cat guy",
+      "see if he has any battle cats for rent",
+      "we will need",
+      "surveillance of the warehouse",
+      "those battle cats are the best of the best",
+      "send out a notice to the other distributors of hamster food products",
+      "rogue gang of hamsters pillaging the area"
+    ]
+  },
+  {
+    "name": "Test 4",
+    "input": "test4.txt",
+    "output": [
+      "# meeting notes 2/6/2025",
+      "met with the cybersecurity team",
+      "about the data breach issue",
+      "for some reason they are really upset about it",
+      "i can't really understand why",
+      "i mean",
+      "this time it was only 1.2k accounts!",
+      "much better than the 20k",
+      "from last time",
+      "sheesh",
+      "anyway, they made the following requests",
+      "next week",
+      "have another meeting on tuesday to review vulnerabilities",
+      "reach out to",
+      "backend team",
+      "review why our server is giving out admin passwords",
+      "when you query",
+      "IP",
+      "without auth",
+      "tokens",
+      "implement a code review and testing process",
+      "hopefully mitigate future issues",
+      "man",
+      "these guys are a pain in the ass"
+    ]
+  }
+]
