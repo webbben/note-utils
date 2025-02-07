@@ -1,4 +1,4 @@
-package notecleanup
+package cleanup
 
 import (
 	"errors"

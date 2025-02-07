@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	notecleanup "github.com/webbben/note-utils/pkg/note-cleanup"
+	"github.com/webbben/note-utils/pkg/summarize"
 )
 
 var sampleNote = `
@@ -21,25 +21,18 @@ We will need 24/hr surveillance of the warehouse and those battle cats are the b
 of hamster food products that there is a rogue gang of hamsters pillaging the area.
 `
 
-var sampleNote1 = `
-# Meeting Notes 2/6/2025
-
-Met with the cybersecurity team again about the data breach issue again. For some reason they are really upset about it. I can't really understand why, I mean
-this time it was only 1.2k accounts! Much better than the 20k from last time... sheesh.
-
-Anyway, they made the following requests:
-
-- next week have another meeting on tuesday to review vulnerabilities again
-- reach out to backend team to review why our server is giving out admin passwords when you query it's IP without auth tokens
-- implement a code review and testing process, to hopefully mitigate futre issues.
-
-Man these guys are a pain in the ass!`
-
 func main() {
-	out, err := notecleanup.CleanNoteWithOpts(sampleNote, notecleanup.CleanNoteOpts{})
+	fmt.Println("source note:", sampleNote)
+
+	out, err := summarize.SummarizeNoteWithOpts(sampleNote, summarize.SummarizeOpts{MaxHeader: 2})
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("deepseek-r1:\n\n" + out)
 
-	fmt.Println(out)
+	out, err = summarize.SummarizeNoteWithOpts(sampleNote, summarize.SummarizeOpts{MaxHeader: 2, Fast: true})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("\n\nllama3.2:3b:\n" + out)
 }
