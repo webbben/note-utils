@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	llama "github.com/webbben/ollama-wrapper"
+	"github.com/webbben/note-utils/internal/llm"
 )
 
 var systemPrompt = `
@@ -73,7 +73,7 @@ type CleanNoteOpts struct {
 
 func CleanNoteWithOpts(noteContent string, opts CleanNoteOpts) (string, error) {
 	if opts.Fast {
-		return CleanNote(noteContent, "llama3.2:3b")
+		return llm.GenerateCompletion(noteContent, systemPrompt, "llama3.2:3b")
 	}
 	return CleanNoteCOT(noteContent)
 }
@@ -81,7 +81,7 @@ func CleanNoteWithOpts(noteContent string, opts CleanNoteOpts) (string, error) {
 func CleanNoteCOT(noteContent string) (string, error) {
 	// sometimes deepseek seems to not close its thinking portion, so retry if that occurs.
 	for range 3 {
-		out, err := CleanNote(noteContent, "deepseek-r1")
+		out, err := llm.GenerateCompletion(noteContent, systemPrompt, "deepseek-r1")
 		if err != nil {
 			return "", err
 		}
@@ -93,35 +93,4 @@ func CleanNoteCOT(noteContent string) (string, error) {
 	}
 
 	return "", errors.New("llm response did not have a </think> tag; attempted 3 times")
-}
-
-// models:
-//
-// llama3.2:3b (default)
-//
-// deepseek-r1
-func CleanNote(noteContent string, model string) (string, error) {
-	if model == "" {
-		model = "llama3.2:3b"
-	}
-	cmd, err := llama.StartServer()
-	if err != nil {
-		return "", err
-	}
-	defer llama.StopServer(cmd)
-
-	llama.SetModel(model)
-
-	client, err := llama.GetClient()
-	if err != nil {
-		return "", err
-	}
-
-	res, err := llama.GenerateCompletionWithOpts(client, systemPrompt, noteContent, map[string]interface{}{
-		"temperature": 0,
-	})
-	if err != nil {
-		return "", err
-	}
-	return res, nil
 }

@@ -7,7 +7,7 @@ import (
 	"log"
 	"strings"
 
-	llama "github.com/webbben/ollama-wrapper"
+	"github.com/webbben/note-utils/internal/llm"
 )
 
 var systemPrompt = `
@@ -27,7 +27,7 @@ func SummarizeNoteWithOpts(noteContent string, opts SummarizeOpts) (string, erro
 	var out string
 	var err error
 	if opts.Fast {
-		out, err = SummarizeNote(noteContent, "llama3.2:3b", sysPrompt)
+		out, err = llm.GenerateCompletion(noteContent, sysPrompt, "llama3.2:3b")
 	} else {
 		out, err = SummarizeNoteCOT(noteContent, sysPrompt)
 	}
@@ -74,7 +74,7 @@ func SummarizeNoteWithOpts(noteContent string, opts SummarizeOpts) (string, erro
 func SummarizeNoteCOT(noteContent string, sysPrompt string) (string, error) {
 	// sometimes deepseek seems to not close its thinking portion, so retry if that occurs.
 	for range 3 {
-		out, err := SummarizeNote(noteContent, "deepseek-r1", sysPrompt)
+		out, err := llm.GenerateCompletion(noteContent, sysPrompt, "deepseek-r1")
 		if err != nil {
 			return "", err
 		}
@@ -86,30 +86,4 @@ func SummarizeNoteCOT(noteContent string, sysPrompt string) (string, error) {
 	}
 
 	return "", errors.New("llm response did not have a </think> tag; attempted 3 times")
-}
-
-func SummarizeNote(noteContent string, model string, sysPrompt string) (string, error) {
-	if model == "" {
-		model = "llama3.2:3b"
-	}
-	cmd, err := llama.StartServer()
-	if err != nil {
-		return "", err
-	}
-	defer llama.StopServer(cmd)
-
-	llama.SetModel(model)
-
-	client, err := llama.GetClient()
-	if err != nil {
-		return "", err
-	}
-
-	res, err := llama.GenerateCompletionWithOpts(client, systemPrompt, noteContent, map[string]interface{}{
-		"temperature": 0,
-	})
-	if err != nil {
-		return "", err
-	}
-	return res, nil
 }
