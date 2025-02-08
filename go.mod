@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	github.com/spf13/cobra v1.8.1
-	github.com/webbben/ollama-wrapper v0.0.0-20241115032211-5b4ebd50313c
+	github.com/webbben/ollama-wrapper v1.0.0
 )
 
 require (
