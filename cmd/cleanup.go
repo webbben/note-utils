@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/webbben/note-utils/internal/llm"
 	"github.com/webbben/note-utils/internal/util"
 	"github.com/webbben/note-utils/pkg/cleanup"
 )
@@ -18,21 +20,16 @@ var cleanupCmd = &cobra.Command{
 	# clean up notes from stdin, and save to a file
 	cat notes.txt | note-utils cleanup > cleaned-notes.md`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var noteContent string
-		var err error
+		if debug {
+			llm.DEBUG = true
+		}
 
-		if file != "" {
-			noteContent, err = util.ReadFile(file)
-			if err != nil {
-				return fmt.Errorf("failed to read file: %w", err)
-			}
-		} else if util.IsStdinPipe() {
-			noteContent, err = util.ReadStdin()
-			if err != nil {
-				return fmt.Errorf("failed to read from stdin: %w", err)
-			}
-		} else {
-			return fmt.Errorf("error: no stdin or file flag detected")
+		textContent, err := util.ReadFileOrStdin(file)
+		if err != nil {
+			return err
+		}
+		if textContent == "" {
+			return errors.New("error: no stdin or file flag detected")
 		}
 
 		opts := cleanup.CleanNoteOpts{}
@@ -41,7 +38,7 @@ var cleanupCmd = &cobra.Command{
 			opts.Fast = true
 		}
 
-		out, err := cleanup.CleanNoteWithOpts(noteContent, opts)
+		out, err := cleanup.CleanNoteWithOpts(textContent, opts)
 		if err != nil {
 			return fmt.Errorf("error occurred while generating summary: %w", err)
 		}
@@ -52,6 +49,7 @@ var cleanupCmd = &cobra.Command{
 
 func init() {
 	cleanupCmd.Flags().BoolVar(&fast, "fast", false, "use a faster model for generating the summary. may result in lower quality, esp. for longer content.")
+	cleanupCmd.Flags().BoolVar(&debug, "debug", false, "include debugging details in output")
 	rootCmd.AddCommand(cleanupCmd)
 
 	// Here you will define your flags and configuration settings.

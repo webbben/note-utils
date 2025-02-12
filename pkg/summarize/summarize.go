@@ -2,7 +2,6 @@ package summarize
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -72,18 +71,5 @@ func SummarizeNoteWithOpts(noteContent string, opts SummarizeOpts) (string, erro
 }
 
 func SummarizeNoteCOT(noteContent string, sysPrompt string) (string, error) {
-	// sometimes deepseek seems to not close its thinking portion, so retry if that occurs.
-	for range 3 {
-		out, err := llm.GenerateCompletion(noteContent, sysPrompt, "deepseek-r1")
-		if err != nil {
-			return "", err
-		}
-
-		parts := strings.Split(out, "</think>")
-		if len(parts) > 1 {
-			return strings.TrimSpace(parts[1]), nil
-		}
-	}
-
-	return "", errors.New("llm response did not have a </think> tag; attempted 3 times")
+	return llm.GenerateCompletionCOT(noteContent, sysPrompt)
 }
